@@ -66,22 +66,14 @@ class Widget(QtWidgets.QWidget):
         vBoxMain.addWidget(frame2, alignment=QtCore.Qt.AlignHCenter)
         self.setLayout(vBoxMain)
 
-    """
-    Обработчик сигналов changeCellFocus всех ячеек, что имеются в поле
-    """
+
     def onChangeCellFocus(self, id):
         if self.idCellInFocus != id and not (id < 0 or id > 80):
             self.cells[self.idCellInFocus].clearCellFocus()
             self.idCellInFocus = id
             self.cells[id].setCellFocus()
 
-    """
-    Переопределенный метод, для того, чтобы получить возможность 
-    обрабатывать нажатия клавиш клавиатуры.
-    Здесь мы будем, в зависимости от нажатой 
-    клавиши, перемещать по полю фокус выделения,
-    ставить цифры в ячейки и очищать их;
-    """
+
     def keyPressEvent(self, evt):
         key = evt.key()
         if key == QtCore.Qt.Key_Up:
@@ -139,16 +131,13 @@ class Widget(QtWidgets.QWidget):
     def onBtnXClicked(self): 
         self.cells[self.idCellInFocus].setNewText("")
 
-    """ 
-    Очистит поле судоку. Будет вызываться при выборе пункта 'Новый'
-    меню 'Файл' или нажатии кнопки 'Новый' панели инструментов
-    """
+
     def onClearAllCells(self):
         for cell in self.cells:
             cell.setText("")
             cell.clearCellBlock()
 
-    """Заблокирует все ячейки, содержащие цифры и не заблокированные"""
+
     def onBlockCell(self):
         cell = self.cells[self.idCellInFocus]
         if cell.text() == "":
@@ -161,29 +150,25 @@ class Widget(QtWidgets.QWidget):
             if cell.isCellChange:
                 cell.setCellBlock()
 
-    """
-    Метод onBlockCells(), блокирующий все ячейки, 
-    выполняет перебор всех ячеек и блокирует любую из них,
-    если она содержит цифру и еще не заблокирована
-    """
+
     def onBlockCells(self):
         for cell in self.cells:
             if cell.text() and cell.isCellChange:
                 cell.setCellBlock()
     
-    "Разблокирует активную ячейку, если она заблокирована"
+
     def onClearBlockCell(self):
         cell = self.cells[self.idCellInFocus]
         if not cell.isCellChange:
             cell.clearCellBlock()
 
-    """Разблокирует все заблокированные ячейки"""
+
     def onClearBlockCells(self):
         for cell in self.cells:
             if not cell.isCellChange:
                 cell.clearCellBlock()
 
-    """Возвращает данные о головоломке в полном формате"""
+
     def getDataAllCells(self):
         listAllData = []
         for cell in self.cells:
@@ -192,7 +177,6 @@ class Widget(QtWidgets.QWidget):
             listAllData.append(s if len(s) == 1 else "0")
         return "".join(listAllData)
 
-    """Возвращает данные о головоломке в компактном формате"""
     def getDataAllCellsMini(self):
         listAllData = []
         for cell in self.cells:
@@ -200,7 +184,6 @@ class Widget(QtWidgets.QWidget):
             listAllData.append(s if len(s) == 1 else "0")
         return "".join(listAllData)
 
-    """Возвращает данные о головоломке в формате для Excel"""
     def getDataAllCellsExcel(self):
         numbers = (9, 18, 27, 36, 45, 54, 63, 72)
         listAllData = [self.cells[0].text()]
@@ -210,11 +193,6 @@ class Widget(QtWidgets.QWidget):
         listAllData.append("\r\n")
         return "".join(listAllData)
 
-    """
-    Принимает с единственным параметром данные о головоломке,
-    представленные в полном или компактном формате
-    (формат распознается автоматически), и выполняет их вставку
-    """
     def setDataAllCells(self, data):
         l = len(data)
         if l == 81:
